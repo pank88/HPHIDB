@@ -118,7 +118,7 @@ flowchart LR
     SVC --> CACHE
     SVC -- events --> Q
     Q --> RV
-    RV -. private-conversation.{id} .-> SPA
+    RV -. "private-conversation.{id}" .-> SPA
     SVC --> MAIL
     SVC --> SMS
     SCH --> Q
@@ -259,7 +259,7 @@ Endpoints: `POST /profile/photos` (multipart), `PUT /profile/photos/{photo}/prim
 |---|---|---|
 | FR-PHO-01 | A member shall upload JPG/PNG photos ≤ **2 MB**, ≥ **200×200 px**, max **6 per profile**, max **10 uploads per rolling 24 h**; validation shall check MIME type and magic bytes (JPEG `ffd8ffe0/e1/e2`, PNG `89504e47`). | ✅ (JPEGs with other APP markers are rejected) |
 | FR-PHO-02 | Files shall be stored under `profiles/photos/{user_id}/{32-random}.{ext}` on the private disk, **encrypted with APP_KEY** when `PHOTO_ENCRYPTION_ENABLED` (default true); the first photo is primary; a new photo may be flagged primary. | ✅ |
-| FR-PHO-03 | Photos shall be served only through **HMAC-SHA256 signed URLs** (`id|expires`, keyed by `APP_KEY`) valid **15 minutes**, rate-limited 100/h per IP; thumbnails 300×300 (cover, JPEG q80 / PNG) generated on the fly. Responses carry `Cache-Control: private, max-age=900`. | ⚠️ URL is not bound to the viewer and serves pending/rejected photos (KI-15e) |
+| FR-PHO-03 | Photos shall be served only through **HMAC-SHA256 signed URLs** (`id\|expires`, keyed by `APP_KEY`) valid **15 minutes**, rate-limited 100/h per IP; thumbnails 300×300 (cover, JPEG q80 / PNG) generated on the fly. Responses carry `Cache-Control: private, max-age=900`. | ⚠️ URL is not bound to the viewer and serves pending/rejected photos (KI-15e) |
 | FR-PHO-04 | Uploaded photos shall start `status = pending`, `is_verified = false` and be approved/rejected by an admin before counting as verified. | ❌ Admin moderation operates on the legacy `profile_photos` table, not `photos`; no code path ever approves an uploaded photo (KI-04) |
 | FR-PHO-05 | Deleting a photo shall remove the file and promote the oldest remaining photo to primary; setting primary shall clear the flag on others. Combined upload/primary/delete calls limited to 10/day per user. | ✅ (no audit log) |
 

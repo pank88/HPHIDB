@@ -86,16 +86,21 @@ All three changes require your **current password** and are limited to 5 per min
 ### 2.1 Overview of the member journey
 
 ```mermaid
-flowchart LR
-    A["Register and<br/>verify OTP"] --> B["Create profile<br/>photos · education<br/>preferences · hobbies"]
-    B --> C["Admin approval"]
-    C --> D["Search and<br/>daily suggestions"]
-    D --> E["Send interest"]
-    E -->|accepted| F["Match"]
-    F --> G["Chat"]
-    B --> H["Browse vendors"]
-    H --> I["Book: inquiry → quote → confirm"]
-    I --> J["Review vendor"]
+flowchart TB
+    subgraph S1["1 · Get set up"]
+        direction LR
+        A["Register and<br/>verify OTP"] --> B["Create profile<br/>photos · education<br/>preferences · hobbies"] --> C["Admin approval"]
+    end
+    subgraph S2["2 · Find a partner"]
+        direction LR
+        D["Search and<br/>daily suggestions"] --> E["Send interest"] -->|accepted| F["Match"] --> G["Chat"]
+    end
+    subgraph S3["3 · Plan the wedding"]
+        direction LR
+        H["Browse vendors"] --> I["Book: inquiry → quote → confirm"] --> J["Review vendor"]
+    end
+    S1 --> S2
+    S1 --> S3
 ```
 
 ### 2.2 Create and edit your profile
